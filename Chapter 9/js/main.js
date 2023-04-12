@@ -2,7 +2,7 @@
 
 	//pseudo-global variables
 	var attrArray = ["IDPs (disaster-related)", "Refugees", "Asylum Seekers", "International Immigrants", "Emigrants"]; //list of attributes
-	var expressed = attrArray[0]; //initial attribute
+	var expressed = attrArray[1]; //initial attribute
 
 
 	//begin script when window loads
@@ -47,7 +47,7 @@ function setMap() {
             countries = data[2];
 
         //europe TopoJSON
-        var europeCountries = topojson.feature(europe, europe.objects.pasted,);
+        var europeCountries = topojson.feature(europe, europe.objects.pasted).features;
 
         //countries TopoJSON
         var countries = topojson.feature(countries, countries.objects.CountriesTJSON);
@@ -79,17 +79,17 @@ function setMap() {
             .attr("d", path);
 
         //add Europe countries to map
-        var europe = map
+       /* var europe = map
             .append("path")
             .datum(europeCountries)
             .attr("class", "europe")
-            .attr("d", path);
+            .attr("d", path);*/
 
-	        countries = joinData(countries, csvData);
+	        europeCountries = joinData(europeCountries, csvData);
 
 	        var colorScale = makeColorScale(csvData);
 
-	        setEnumerationUnits(countries,map,path,colorScale);
+	        setEnumerationUnits(europeCountries,map,path,colorScale);
 
 	        //add coordinated visualization to the map
         	setChart(csvData, colorScale);
@@ -122,13 +122,13 @@ function setMap() {
 		//loop through csv to assign each set of csv attribute values to geojson country
 	        for (var i=0; i<csvData.length; i++){
 	            var csvCountry = csvData[i]; //the current country
-	            var csvKey = csvCountry.adm1_code; //the CSV primary key
+	            var csvKey = csvCountry.Country; //the CSV primary key
 
 	            //loop through geojson country to find correct country
 	            for (var a=0; a<countries.length; a++){
 
 	                var geojsonProps = countries[a].properties; //the current country geojson properties
-	                var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
+	                var geojsonKey = geojsonProps.name; //the geojson primary key
 
 	                
 	                if (geojsonKey == csvKey){
@@ -146,11 +146,11 @@ function setMap() {
 
 	function makeColorScale(data){
 		var colorClasses = [
-	        "#D4B9DA",
-	        "#C994C7",
-	        "#DF65B0",
-	        "#DD1C77",
-	        "#980043"
+	        "#ffffc",
+	        "#a1dab4",
+	        "#41b6c4",
+	        "#2c7fb8",
+	        "#253494"
 	    ];
 
 	    //create color scale generator
@@ -172,16 +172,17 @@ function setMap() {
 
 function setEnumerationUnits(countries,map,path,colorScale){
 	//add coiuntries to map
-    var countries = map.select(".countries")
+    var countries = map.selectAll(".countries")
         .data(countries)
         .enter()
         .append("path")
         .attr("class", function(d){
-            return "countries " + d.properties.adm1_code;
+            return "countries " + d.properties.name;
         })
         .attr("d", path)
         .style("fill", function(d){
             var value = d.properties[expressed];
+            console.log(value)
             if(value) {
             	return colorScale(d.properties[expressed]);
             } else {
@@ -193,9 +194,9 @@ function setEnumerationUnits(countries,map,path,colorScale){
 //function to create coordinated bar chart
 function setChart(csvData, colorScale){
     //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.825,
+    var chartWidth = window.innerWidth * 0.340,
         chartHeight = 473,
-        leftPadding = 25,
+        leftPadding = 50,
         rightPadding = 2,
         topBottomPadding = 5,
         chartInnerWidth = chartWidth - leftPadding - rightPadding,
@@ -219,7 +220,7 @@ function setChart(csvData, colorScale){
     //create a scale to size bars proportionally
     var yScale = d3.scaleLinear()
         .range([463, 0])
-        .domain([0, 100]);
+        .domain([292, 1111350]);
 
     //set bars for each variable
     var bars = chart.selectAll(".bar")
@@ -248,10 +249,10 @@ function setChart(csvData, colorScale){
 
     //create a text element for the chart title
     var chartTitle = chart.append("text")
-        .attr("x", 40)
+        .attr("x", 60)
         .attr("y", 40)
         .attr("class", "chartTitle")
-        .text("Number of " + expressed[3] + " in Each EU Country");
+        .text("Number of " + expressed + " in Each EU Country");
 
     //create vertical axis generator
     var yAxis = d3.axisLeft()
