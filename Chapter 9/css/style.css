@@ -71,7 +71,7 @@
 
 .title {
     color: #f7f4f4;
-    font-size: xxx-large;
+    font-size: 5ch;
     position: relative;
     left: 10px;
     font-weight: 500;
@@ -119,5 +119,11 @@ option {
 
 
 body {
-    background-color: rgba(185, 183, 183, 0.899);
+    background-color: rgba(169, 184, 205, 0.988);
+}
+
+.text{
+color: #242424; 
+font-family:Georgia, 'Times New Roman', Times, serif;
+   
 }
