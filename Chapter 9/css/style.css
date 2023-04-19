@@ -73,6 +73,7 @@
     color: #f7f4f4;
     font-size: 5ch;
     position: relative;
+    text-align: center;
     left: 10px;
     font-weight: 500;
     stroke-width: 5cm;
@@ -102,11 +103,11 @@ option {
 
 .infolabel {
     position: absolute;
-    height: 150px;
-    min-width: 100px;
+    height: 50px;
+    min-width: 1px;
     color: #fff;
-    background-color: #000;
-    border: solid thin #fff;
+    background-color: #04214b;
+    border: solid thin #04214b;
     padding: 5px 10px;
 }
 
@@ -124,6 +125,6 @@ body {
 
 .text{
 color: #242424; 
-font-family:Georgia, 'Times New Roman', Times, serif;
-   
+font-family:'Times New Roman', Times, serif;
+font-size: medium;
 }
