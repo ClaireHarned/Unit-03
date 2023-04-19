@@ -1,13 +1,13 @@
+//wrap everything is immediately invoked anonymous function so nothing is in clobal scope
 (function () {
-
     //pseudo-global variables
-    var attrArray = ["IDPs (disaster-related)", "Refugees", "Asylum Seekers", "International Immigration", "Emigrants"]; //list of attributes
+    var attrArray = ["IDP's (Disaster-Related", "Refugees", "Asylum Seekers", "International Immigrants", "Emigrants"]; //list of attributes
     var expressed = attrArray[1]; //initial attribute
 
     //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.450,
+    var chartWidth = window.innerWidth * 0.425,
         chartHeight = 473,
-        leftPadding = 50,
+        leftPadding = 25,
         rightPadding = 2,
         topBottomPadding = 5,
         chartInnerWidth = chartWidth - leftPadding - rightPadding,
@@ -15,7 +15,7 @@
         translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
     //create a scale to size bars proportionally to frame and for axis
-    var yScale = d3.scaleLinear().range([463, 0]).domain([0, 1111350]);
+    var yScale = d3.scaleLinear().range([463, 0]).domain([0, 110]);
 
     //begin script when window loads
     window.onload = setMap();
@@ -34,8 +34,7 @@
             .attr("width", width)
             .attr("height", height);
 
-        //create Albers equal area conic projection centered on country
-    
+        //create Albers equal area conic projection centered on France
         var projection = d3
             .geoAlbers()
             .center([-6, 47])
@@ -57,7 +56,7 @@
         function callback(data) {
             var csvData = data[0],
                 europe = data[1],
-                countries = data[2];
+                france = data[2];
 
             setGraticule(map, path);
 
@@ -66,10 +65,10 @@
 
             var countries = topojson.feature(countries, countries.objects.CountriesTJSON);
 
-            //add all countries to map
+            //add Europe countries to map
             var countries = map
                 .append("path")
-                .datum(countries)
+                .datum(europeCountries)
                 .attr("class", "countries")
                 .attr("d", path);
 
@@ -110,8 +109,8 @@
     function joinData(countries, csvData) {
         //loop through csv to assign each set of csv attribute values to geojson region
         for (var i = 0; i < csvData.length; i++) {
-            var csvCountry = csvData[i]; //the current country
-            var csvKey = csvCountry.name; //the CSV primary key
+            var csvRegion = csvData[i]; //the current country
+            var csvKey = csvRegion.adm1_code; //the CSV primary key
 
             //loop through geojson regions to find correct country
             for (var a = 0; a < countries.length; a++) {
@@ -123,7 +122,7 @@
 
                     //assign all attributes and values
                     attrArray.forEach(function (attr) {
-                        var val = parseFloat(csvCountry[attr]); 
+                        var val = parseFloat(csvRegion[attr]); 
                         geojsonProps[attr] = val; //assign attribute and value to geojson properties
                     });
                 }
@@ -158,7 +157,7 @@
         return colorScale;
     }
 
-    function setEnumerationUnits(countries, map, path, colorScale) {
+    function setEnumerationUnits(franceRegions, map, path, colorScale) {
         //add countries to map
         var countries = map
             .selectAll(".countries")
@@ -216,7 +215,7 @@
                 return b[expressed] - a[expressed];
             })
             .attr("class", function (d) {
-                return "bar " + d.name;
+                return "bar " + d.adm1_code;
             })
             .attr("width", chartInnerWidth / csvData.length - 1)
             .on("mouseover", function (event, d) {
@@ -230,21 +229,18 @@
         //create a text element for the chart title
         var chartTitle = chart
             .append("text")
-            .attr("x", 80)
+            .attr("x", 60)
             .attr("y", 40)
             .attr("class", "chartTitle");
 
-        updateChart(bars, csvData.length, colorScale, 1111350);
+        updateChart(bars, csvData.length, colorScale);
 
         //create vertical axis generator
         var yAxis = d3.axisLeft()
         .scale(yScale);
 
         //place axis
-        var axis = chart.append("g")
-        .attr("class", "axis")
-        .attr("transform", translate)
-        .call(yAxis);
+        var axis = chart.append("g").attr("class", "axis").attr("transform", translate).call(yAxis);
 
         //create frame for chart border
         var chartFrame = chart
@@ -324,23 +320,10 @@
             })
             .duration(500);
 
-        var domainArray = [];
-        for (var i = 0; i < csvData.length; i++) {
-            var val = parseFloat(csvData[i][expressed]);
-            domainArray.push(val);
-        }
-        var max = d3.max(domainArray)
-        
-        updateChart(bars, csvData.length, colorScale, max);
+        updateChart(bars, csvData.length, colorScale);
     }
 
-    function updateChart(bars, n, colorScale, max) {
-        yScale = d3.scaleLinear().range([463, 0]).domain([0, max]);
-        
-        var yAxis = d3.axisLeft()
-            .scale(yScale);
-
-        d3.select(".axis").call(yAxis)
+    function updateChart(bars, n, colorScale) {
         //position bars
         bars.attr("x", function (d, i) {
             return i * (chartInnerWidth / n) + leftPadding;
@@ -366,9 +349,7 @@
         var chartTitle = d3
             .select(".chartTitle")
             .text("Number of " + expressed + " in each EU Country");
-    
-    
-        }
+    }
 
     //function to highlight enumeration units and bars
     function highlight(props) {
@@ -437,6 +418,6 @@
 
         d3.select(".infolabel")
             .style("left", x + "px")
-            .style("bottom", y + "px");
+            .style("top", y + "px");
     }
 })();

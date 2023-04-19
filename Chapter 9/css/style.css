@@ -1,9 +1,6 @@
 .map {
     border: medium solid #999;
-}
-
-.map {
-    fill: rgb(133, 30, 30);
+    fill: rgb(229, 224, 224);
     stroke: #999;
     stroke-width: 1px;
 }
@@ -16,13 +13,14 @@
 
 .gratLines {
     fill: none;
-    stroke: #999;
+    stroke: #ebe9e9;
     stroke-width: 0.4px;
 }
 
 .gratBackground {
-    fill: #D5E3FF;
+    fill: #6d7d99;
 }
+
 .countries {
     stroke: #000;
     stroke-width: 0.5px;
@@ -36,17 +34,18 @@
 
 .chart {
     float: right;
-    margin: 7px 20px 0 0;
+    margin: 10px 20px 1 0;
 }
 
 .chartTitle {
-    font-family: sans-serif;
-    font-size: 1.5em;
-    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 1.1em;
+    fill: rgb(245, 242, 242);
+    font-weight: lighter;
 }
 
 .chartBackground {
-    fill: rgba(128,128,128,.2);
+    fill: #8491a39f;
 }
 
 .chartFrame {
@@ -66,12 +65,59 @@
 
 .axis text {
     font-family: sans-serif;
-    font-size: 0.8em;
-    fill: #999;
+    font-size: 0.9em;
+    fill: #0b0b0b;
 }
 
 .title {
-    color: #000000;
-    font-size: xx-large;
+    color: #f7f4f4;
+    font-size: xxx-large;
+    position: relative;
+    left: 10px;
+    font-weight: 500;
+    stroke-width: 5cm;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
 
+
+
+
+.dropdown {
+    position: center;
+    top: 40px;
+    left: 40px;
+    z-index: 10;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 2px;
+    border: 1px solid #e2caca;
+    box-shadow: 2px 2px 4px #999;
+}
+
+option {
+    font-weight: normal;
+}
+
+
+.infolabel {
+    position: absolute;
+    height: 150px;
+    min-width: 100px;
+    color: #fff;
+    background-color: #000;
+    border: solid thin #fff;
+    padding: 5px 10px;
+}
+
+.infolabel h1 {
+    margin: 0 20px 0 0;
+    padding: 0;
+    display: inline-block;
+    line-height: 1em;
+}
+
+
+body {
+    background-color: rgba(185, 183, 183, 0.899);
 }
